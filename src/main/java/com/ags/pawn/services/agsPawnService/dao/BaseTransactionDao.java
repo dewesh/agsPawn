@@ -9,7 +9,7 @@ import java.util.UUID;
  * Created by dagraw2 on 3/26/18.
  */
 public interface BaseTransactionDao {
-    BaseTransaction createBaseTransaction(BaseTransaction baseTransaction);
+    BaseTransaction startBaseTransaction(BaseTransaction baseTransaction);
     BaseTransaction closeBaseTransaction(UUID baseTransactionPk);
     BaseTransaction getBaseTransactionById(UUID baseTransactionPk);
     List getBaseTransactionsByCustomerPk(UUID customerPk);

@@ -1,5 +1,8 @@
 package com.ags.pawn.services.agsPawnService.entity;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
 /**
@@ -7,8 +10,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="base_transaction")
-@NamedQuery(name = "BaseTransaction.findAll", query = "SELECT p FROM BaseTransaction p")
 @AttributeOverride(name = "id", column = @Column(name = "base_transaction_pk"))
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BaseTransaction extends BaseEntity{
     private Customer customer;
     private String principal;
@@ -18,7 +21,7 @@ public class BaseTransaction extends BaseEntity{
     private Boolean isActive = true;
 
     @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="customer_pk")
+    @JoinColumn(name = "customer_id", nullable=false, updatable=false)
     public Customer getCustomer() {
         return customer;
     }
@@ -70,5 +73,17 @@ public class BaseTransaction extends BaseEntity{
 
     public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "customer=" + customer.getId() +
+                ", principal='" + principal + '\'' +
+                ", interestRate='" + interestRate + '\'' +
+                ", itemType='" + itemType + '\'' +
+                ", note='" + note + '\'' +
+                ", isActive=" + isActive +
+                '}';
     }
 }

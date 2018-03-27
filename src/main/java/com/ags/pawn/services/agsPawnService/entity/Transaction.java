@@ -16,7 +16,7 @@ public class Transaction extends BaseEntity{
     private String transactionType;
     private String note;
 
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL, optional=false)
     @JoinColumn(name="base_transaction_pk")
     public BaseTransaction getBaseTransaction() {
         return baseTransaction;

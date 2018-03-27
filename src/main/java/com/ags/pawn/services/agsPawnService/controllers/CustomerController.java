@@ -6,13 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by dagraw2 on 3/25/18.
@@ -24,14 +22,21 @@ public class CustomerController {
     private CustomerService customerService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ResponseEntity<List> userDetails() {
-
+    @ResponseBody
+    public List userDetails() {
         List customerDetails = customerService.getCustomers();
-        return new ResponseEntity<List>(customerDetails,HttpStatus.OK);
+        return customerDetails;
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @ResponseBody
     public Customer createCustomer(@Valid @RequestBody Customer customer) {
         return customerService.createCustomer(customer);
+    }
+
+    @GetMapping("/{id}")
+    @ResponseBody
+    public Customer getCustomer(@PathVariable("id") UUID id) {
+        return customerService.getCustomer(id);
     }
 }

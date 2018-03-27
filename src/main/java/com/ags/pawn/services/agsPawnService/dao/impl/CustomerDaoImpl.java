@@ -4,21 +4,27 @@ import com.ags.pawn.services.agsPawnService.dao.CustomerDao;
 import com.ags.pawn.services.agsPawnService.entity.Customer;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.criterion.Restrictions;
+import org.slf4j.*;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.UUID;
 
 /**
  * Created by dagraw2 on 3/25/18.
  */
+@Transactional
 @Repository
 public class CustomerDaoImpl implements CustomerDao {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomerDaoImpl.class);
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -31,10 +37,14 @@ public class CustomerDaoImpl implements CustomerDao {
 
     @Override
     public Customer createCustomer(Customer customer) {
-        Session session = entityManager.unwrap(Session.class);
-        session.beginTransaction();
-        session.save(customer);
-        session.getTransaction().commit();
+        entityManager.persist(customer);
+        return customer;
+    }
+
+    @Override
+    @Transactional
+    public Customer getCustomerById(UUID id) {
+        Customer customer = entityManager.find(Customer.class,id);
         return customer;
     }
 }

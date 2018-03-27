@@ -1,22 +1,24 @@
 package com.ags.pawn.services.agsPawnService.entity;
 
-import org.springframework.boot.autoconfigure.web.ResourceProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by dagraw2 on 3/25/18.
  */
 @Entity
 @Table(name="customer")
-@NamedQuery(name = "Customer.findAll", query = "SELECT p FROM Customer p")
 @AttributeOverride(name = "id", column = @Column(name = "customer_pk"))
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Customer extends BaseEntity{
 
     private String firstName;
     private String lastName;
     private String village;
     private String note;
+    private List<BaseTransaction> baseTransactions;
 
     @Column(name = "firstName")
     public String getFirstName() {
@@ -49,5 +51,25 @@ public class Customer extends BaseEntity{
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+//    @OneToMany(mappedBy = "customer", orphanRemoval = true, fetch = FetchType.LAZY)
+    @Transient
+    public List<BaseTransaction> getBaseTransactions() {
+        return baseTransactions;
+    }
+
+    public void setBaseTransactions(List<BaseTransaction> baseTransactions) {
+        this.baseTransactions = baseTransactions;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", village='" + village + '\'' +
+                ", note='" + note + '\'' +
+                '}';
     }
 }

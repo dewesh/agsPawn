@@ -1,10 +1,9 @@
 package com.ags.pawn.services.agsPawnService.service;
 
 import com.ags.pawn.services.agsPawnService.entity.Customer;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by dagraw2 on 3/25/18.
@@ -12,4 +11,5 @@ import java.util.List;
 public interface CustomerService {
     List getCustomers();
     Customer createCustomer(Customer customer);
+    Customer getCustomer(UUID id);
 }

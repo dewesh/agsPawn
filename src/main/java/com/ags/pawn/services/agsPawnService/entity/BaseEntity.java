@@ -7,9 +7,7 @@ package com.ags.pawn.services.agsPawnService.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.hibernate.annotations.ColumnTransformer;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -22,7 +20,7 @@ import java.util.UUID;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
 public abstract class BaseEntity {
 
-    private volatile UUID id;
+    private UUID id;
     private Long dbLockVersion;
     private String modifiedBy;
     private String createdBy;
@@ -30,21 +28,11 @@ public abstract class BaseEntity {
     private Date createdDate;
 
     @Id
-    @Column(name="ID", length = 16)
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
+    @Type(type="uuid-char")
     public UUID getId()
     {
-        if (this.id == null)
-        {
-            // Double-checked locking to make sure we don't overwrite in case of
-            // a race, and we avoid lock acquisition for reads.
-            synchronized (this)
-            {
-                if (this.id == null)
-                {
-                    this.id = UUID.randomUUID();
-                }
-            }
-        }
         return id;
     }
 
@@ -74,11 +62,11 @@ public abstract class BaseEntity {
      */
     public void setId(UUID id)
     {
-        if(id == null) {
-            throw new IllegalStateException("Expected a non-null ID");
-        } else if(id.version() != 4){
-            throw new IllegalStateException("UUID value %s provided is not of type-4. DAL only supports type-4 UUID"+id.toString());
-        }
+//        if(id == null) {
+//            throw new IllegalStateException("Expected a non-null ID");
+//        } else if(id.version() != 4){
+//            throw new IllegalStateException("UUID value %s provided is not of type-4. DAL only supports type-4 UUID"+id.toString());
+//        }
         this.id = id;
     }
 
